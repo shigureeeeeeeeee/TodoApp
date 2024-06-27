@@ -2,11 +2,14 @@
 
 import React from 'react';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
 import { Button } from "@/components/ui/button";
 import { Bell, Settings, User } from 'lucide-react';
+import { useSession, signOut } from "next-auth/react";
 
 const Navbar: React.FC = () => {
   const pathname = usePathname();
+  const { data: session, status } = useSession();
 
   const getPageTitle = (path: string) => {
     switch (path) {
@@ -16,6 +19,8 @@ const Navbar: React.FC = () => {
         return 'Calendar';
       case '/report':
         return 'Report';
+      case '/signin':
+        return 'Sign In';
       default:
         return 'Task Manager';
     }
@@ -31,12 +36,16 @@ const Navbar: React.FC = () => {
         <Button variant="ghost" size="icon">
           <Settings size={20} />
         </Button>
-        <Button variant="ghost" size="icon">
-          <User size={20} />
-        </Button>
+        {status === "authenticated" ? (
+          <Button variant="ghost" onClick={() => signOut()}>Sign Out</Button>
+        ) : (
+          <Link href="/signin" passHref>
+            <Button variant="ghost">Sign In</Button>
+          </Link>
+        )}
       </div>
     </nav>
   );
 };
 
-export default Navbar;
+export default Navbar;;

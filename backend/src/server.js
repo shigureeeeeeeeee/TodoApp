@@ -1,10 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-require('dotenv').config();
+require('dotenv').config(); // dotenv を読み込む
 
 const todoRoutes = require('./routes/todoRoutes');
 const eventRoutes = require('./routes/eventRoutes');
+const authRoutes = require('./routes/auth');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -24,6 +25,7 @@ mongoose.connect(process.env.MONGODB_URI, {
 // Routes
 app.use('/api/todos', todoRoutes);
 app.use('/api/events', eventRoutes);
+app.use('/api/auth', authRoutes);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
